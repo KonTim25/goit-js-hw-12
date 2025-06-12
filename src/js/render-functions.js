@@ -19,7 +19,7 @@ export const createGallery = (images) => {
         </li>
     `).join('');
 
-    gallery.innerHTML = markup;
+    gallery.innerHTML += markup;
 
     if (!lightbox) {
         lightbox = new SimpleLightbox('.gallery a', {
@@ -29,6 +29,8 @@ export const createGallery = (images) => {
     } else {
         lightbox.refresh();
     }
+
+    
 };
 
 export const clearGallery = () => {
