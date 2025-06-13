@@ -5,9 +5,10 @@ import "izitoast/dist/css/iziToast.min.css";
 
 const form = document.querySelector('.form');
 const loadMoreButton = document.querySelector('.load-more');
-
+const searchData = document.querySelector('.search-data');
 let currentPage = 1;
 let searchQuery = '';
+let searchDataText = '';
 
 form.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -26,10 +27,11 @@ form.addEventListener('submit', async (event) => {
     clearGallery();
     showLoader();
     currentPage = 1;
-
+    
     try {
-        const images = await getImagesByQuery(searchQuery, currentPage);
-        if (images.length === 0) {
+        const data = await getImagesByQuery(searchQuery, currentPage);
+
+        if (data.hits.length === 0) {
             iziToast.error({
                 message: 'Sorry, there are no images matching your search query. Please try again!',
                 position: 'topRight',
@@ -38,8 +40,20 @@ form.addEventListener('submit', async (event) => {
             return;
         }
 
-        createGallery(images);
-        showLoadMoreButton();
+        createGallery(data.hits);
+
+        searchDataText = `<p><strong>Search phrase</strong>: ${searchQuery}, <strong>Total imades:</strong> ${data.total}, <strong>Total hits:</strong> ${data.totalHits}, <strong>Images pp:</strong> ${data.hits.length}, <strong>Total pages:</strong> ${Math.ceil(data.totalHits / 15)}</p>`;
+        searchData.innerHTML = searchDataText;
+
+        if (currentPage * 15 >= data.totalHits) {
+            hideLoadMoreButton();
+            iziToast.info({
+                message: "We're sorry, but you've reached the end of search results",
+                position: 'topRight',
+            });
+        } else {
+            showLoadMoreButton();
+        }
     } catch (error) {
         iziToast.error({
             message: 'An error occurred while fetching images. Please try again later.',
@@ -58,8 +72,9 @@ loadMoreButton.addEventListener('click', async () => {
     showLoader();
 
     try {
-        const images = await getImagesByQuery(searchQuery, currentPage);
-        if (images.length === 0) {
+        const data = await getImagesByQuery(searchQuery, currentPage);
+
+        if (data.hits.length === 0) {
             hideLoadMoreButton();
             iziToast.info({
                 message: "We're sorry, but you've reached the end of search results",
@@ -69,7 +84,7 @@ loadMoreButton.addEventListener('click', async () => {
             return;
         }
 
-        createGallery(images);
+        createGallery(data.hits);
         
         setTimeout(() => {
             const galleryItem = document.querySelector('.gallery-item');
@@ -82,7 +97,16 @@ loadMoreButton.addEventListener('click', async () => {
             }
         }, 300);
         
-        showLoadMoreButton();
+        if (currentPage * 15 >= data.totalHits) {
+            hideLoadMoreButton();
+            iziToast.info({
+                message: "We're sorry, but you've reached the end of search results",
+                position: 'topRight',
+            });
+        } else {
+            showLoadMoreButton();
+        }
+        
     } catch (error) {
         iziToast.error({
             message: 'An error occurred while fetching images. Please try again later.',

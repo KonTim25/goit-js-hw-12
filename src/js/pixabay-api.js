@@ -15,7 +15,8 @@ export const getImagesByQuery = async (query, page = 1, perPage = 15) => {
                 per_page: perPage,
             },
         });
-        return response.data.hits;
+        
+        return response.data;
     } catch (error) {
         console.error('Error fetching data:', error);
         throw error;

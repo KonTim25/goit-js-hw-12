@@ -5,6 +5,7 @@ let lightbox;
 
 export const createGallery = (images) => {
     const gallery = document.querySelector('.gallery');
+
     const markup = images.map(image => `
         <li class="gallery-item">
             <a href="${image.largeImageURL}" class="lightbox">

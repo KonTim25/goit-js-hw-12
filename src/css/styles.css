@@ -22,6 +22,10 @@ form {
   margin-bottom: 20px;
 }
 
+.search-data {
+  margin-bottom: 20px;
+}
+
 .gallery {
   display: flex;
   flex-wrap: wrap;
