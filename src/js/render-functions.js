@@ -47,3 +47,13 @@ export const hideLoader = () => {
     const loader = document.querySelector('.loader');
     loader.style.display = 'none';
 };
+
+export const showLoadMoreButton = () => {
+    const loadMoreButton = document.querySelector('.load-more');
+    loadMoreButton.classList.add('visible');
+};
+
+export const hideLoadMoreButton = () => {
+    const loadMoreButton = document.querySelector('.load-more');
+    loadMoreButton.classList.remove('visible');
+};

@@ -118,3 +118,7 @@ form {
 .load-more:hover {
   background-color: #0056b3;
 }
+
+.load-more.visible {
+  display: block; /* Показываем кнопку, когда класс добавлен */
+}
